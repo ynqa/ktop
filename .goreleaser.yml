@@ -1,0 +1,21 @@
+builds:
+- binary: ktop
+  goos:
+  - windows
+  - darwin
+  - linux
+  goarch:
+  - amd64
+
+archive:
+  format: tar.gz
+  format_overrides:
+  - goos: windows
+    format: zip
+
+brew:
+  github:
+    owner: ynqa
+    name: homebrew-ktop
+  homepage: "https://github.com/ynqa/ktop/"
+  description: "A visualized monitoring dashboard for Kubernetes"
