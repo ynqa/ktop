@@ -30,7 +30,7 @@ const (
 `
 	hintStr = `
 
-<q>, <C-c>      Quite
+<q>, <C-c>      Quit
 <Up>            Up
 <Down>          Down
 <Right>, <Left> Switch Table Mode
