@@ -25,8 +25,10 @@ $ brew install ktop
 From source codes:
 
 ```bash
-$ git clone git@github.com:ynqa/ktop.git
-$ go build ktop.go
+$ go get github.com/ynqa/ktop
+$ cd $GOPATH/src/github.com/ynqa/ktop/
+$ dep ensure -v
+$ go install
 ```
 
 ## Usage
