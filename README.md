@@ -4,8 +4,6 @@
 
 A visualized monitoring dashboard for Kubernetes.
 
-![vegeta_attack](https://user-images.githubusercontent.com/6745370/57700251-8891ba80-7694-11e9-8074-af95782479e1.gif)
-
 `kubectl` also has `top` subcommand, but it is not able to:
 
 - Watch usages regularly for Pod/Node
