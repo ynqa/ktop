@@ -1,5 +1,7 @@
 # ktop
 
+<img width="70%" height="70%" src="https://user-images.githubusercontent.com/6745370/81596326-d7387880-93fe-11ea-83da-08aadf06908d.png" />
+
 [![Build Status](https://travis-ci.com/ynqa/ktop.svg?branch=master)](https://travis-ci.com/ynqa/ktop)
 
 A visualized monitoring dashboard for Kubernetes.
@@ -23,10 +25,7 @@ $ brew install ktop
 From source codes:
 
 ```bash
-$ go get github.com/ynqa/ktop
-$ cd $GOPATH/src/github.com/ynqa/ktop/
-$ dep ensure -v
-$ go install
+$ go get -u github.com/ynqa/ktop
 ```
 
 ## Usage

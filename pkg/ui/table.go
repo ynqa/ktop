@@ -4,7 +4,7 @@ import (
 	"image"
 	"strings"
 
-	. "github.com/gizak/termui"
+	. "github.com/gizak/termui/v3"
 )
 
 type Table struct {
