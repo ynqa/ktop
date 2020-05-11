@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	summarizedTitle  = "⎈  Pod ⎈ "
+	summarizedTitle  = "⎈ Pod ⎈"
 	summarizedHeader = []string{
 		"POD", "CPU(U)", "Memory(U)",
 	}

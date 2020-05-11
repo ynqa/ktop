@@ -24,7 +24,7 @@ var (
 	AllType        = "All"
 	NodeType       = "Node"
 
-	allTitle  = "⎈  Pod/Container ⎈ "
+	allTitle  = "⎈ Pod/Container ⎈"
 	allHeader = []string{
 		"POD", "CONTAINER",
 		"CPU(U)", "CPU(L)", "CPU(R)",

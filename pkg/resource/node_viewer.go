@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	nodeTitle  = "⎈  Node ⎈ "
+	nodeTitle  = "⎈ Node ⎈"
 	nodeHeader = []string{
 		"NODE",
 		"CPU(A)", "CPU(U)", "%CPU",

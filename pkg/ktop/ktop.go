@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"sync"
 
-	"github.com/gizak/termui"
+	"github.com/gizak/termui/v3"
 	"github.com/pkg/errors"
 
 	corev1 "k8s.io/api/core/v1"
@@ -30,11 +30,11 @@ const (
 	nodeAllocatableLabel = "NodeAllocatable"
 
 	// colors
-	borderColor         = termui.Color(123)
-	selectedTableColor  = termui.ColorBlue
+	borderColor         = termui.ColorBlue
+	selectedTableColor  = termui.ColorYellow
 	graphLabelNameColor = termui.ColorWhite
-	graphLimitColor     = termui.Color(7)
-	graphDataColor      = termui.Color(226)
+	graphLimitColor     = termui.ColorWhite
+	graphDataColor      = termui.ColorGreen
 )
 
 type Monitor struct {
@@ -69,7 +69,7 @@ func NewMonitor(kubeclients *kube.KubeClients, podQuery, containerQuery, nodeQue
 
 	// graph for cpu
 	cpu := ui.NewGraph()
-	cpu.Title = "⎈  CPU Usage ⎈ "
+	cpu.Title = "⎈ CPU Usage ⎈"
 	cpu.TitleStyle = titleStyle
 	cpu.BorderStyle = termui.NewStyle(borderColor)
 	cpu.LabelNameColor = graphLabelNameColor
@@ -78,7 +78,7 @@ func NewMonitor(kubeclients *kube.KubeClients, podQuery, containerQuery, nodeQue
 
 	// graph for memory
 	mem := ui.NewGraph()
-	mem.Title = "⎈  Memory Usage ⎈ "
+	mem.Title = "⎈ Memory Usage ⎈"
 	mem.TitleStyle = titleStyle
 	mem.BorderStyle = termui.NewStyle(borderColor)
 	mem.LabelNameColor = graphLabelNameColor

@@ -8,7 +8,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/gizak/termui"
+	"github.com/gizak/termui/v3"
 	"github.com/spf13/cobra"
 
 	"k8s.io/cli-runtime/pkg/genericclioptions"
@@ -21,15 +21,13 @@ import (
 
 const (
 	logoStr = `
- _    _              
-| | _| |_ ___  _ __  
-| |/ / __/ _ \| '_ \ 
-|   <| || (_) | |_) |
-|_|\_\\__\___/| .__/ 
-              |_|    
+__  __    ______   ______     ______  
+/\ \/ /   /\__  _\ /\  __ \   /\  == \ 
+\ \  _"-. \/_/\ \/ \ \ \/\ \  \ \  _-/ 
+ \ \_\ \_\   \ \_\  \ \_____\  \ \_\   
+  \/_/\/_/    \/_/   \/_____/   \/_/   																			
 `
 	hintStr = `
-
 <q>, <C-c>      Quit
 <Up>            Up
 <Down>          Down
@@ -126,7 +124,7 @@ func (k *ktopCmd) run(cmd *cobra.Command, args []string) error {
 	logo.TextStyle = termui.NewStyle(termui.ColorWhite, termui.ColorClear, termui.ModifierBold)
 	hint := ui.NewTextField()
 	hint.Text = hintStr
-	hint.TextStyle = termui.NewStyle(termui.Color(225), termui.ColorClear)
+	hint.TextStyle = termui.NewStyle(termui.Color(244), termui.ColorClear)
 
 	grid := termui.NewGrid()
 	grid.Set(
