@@ -13,7 +13,7 @@ archives:
   - goos: windows
     format: zip
 
-brew:
+brews:
 - github:
     owner: ynqa
     name: homebrew-ktop
