@@ -1,13 +1,13 @@
 language: go
 
 go:
-- 1.11.x
-
-before_install:
-- go get github.com/golang/dep/...
+- "1.14.x"
 
 install:
-- $GOPATH/bin/dep ensure --vendor-only
+- go mod vendor
+
+script:
+- go test ./...
 
 deploy:
 - provider: script
