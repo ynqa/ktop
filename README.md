@@ -18,7 +18,7 @@ A visualized monitoring dashboard for Kubernetes.
 For MacOS:
 
 ```bash
-$ brew tap ynqa/ktop
+$ brew tap ynqa/tap
 $ brew install ktop
 ```
 
