@@ -1,10 +1,12 @@
-package graph
+package drawer
 
 import (
 	"fmt"
+	"image"
 
 	"github.com/gizak/termui/v3"
-	"github.com/ynqa/widgets/pkg/node"
+	"github.com/ynqa/widgets/pkg/table"
+	"github.com/ynqa/widgets/pkg/table/node"
 	corev1 "k8s.io/api/core/v1"
 
 	"github.com/ynqa/ktop/pkg/formats"
@@ -12,17 +14,37 @@ import (
 	"github.com/ynqa/ktop/pkg/ui"
 )
 
-type Drawer interface {
-	Draw(*ui.Graph, resources.Resources, corev1.ResourceName, []*node.Node)
+type TableDrawer interface {
+	Draw(*table.Table, resources.Resources)
 }
 
-type NopDrawer struct{}
+type NopTableDrawer struct{}
 
-func (*NopDrawer) Draw(*ui.Graph, resources.Resources, corev1.ResourceName, []*node.Node) {}
+func (d *NopTableDrawer) Draw(table *table.Table, r resources.Resources) {
+	table.SetHeaders([]string{"message"})
+	table.SetWidthFn(func(_ []string, rect image.Rectangle) []int {
+		return []int{rect.Dx() - 1}
+	})
+	table.SetNode(node.New("", []string{"not found: nodes, pods, and containers"}))
+}
 
-type KubeDrawer struct{}
+type KubeTableDrawer struct{}
 
-func (d *KubeDrawer) Draw(g *ui.Graph, r resources.Resources, typ corev1.ResourceName, nodes []*node.Node) {
+func (d *KubeTableDrawer) Draw(table *table.Table, r resources.Resources) {
+	table.SetHeaders([]string{"name", "namespace", "usage.cpu", "usage.memory"})
+	table.SetWidthFn(func(headers []string, rect image.Rectangle) []int {
+		widths := []int{rect.Dx() / 2}
+		denom := 2 * (len(headers) - 1)
+		for i := 1; i < len(headers); i++ {
+			widths = append(widths, rect.Dx()/denom)
+		}
+		return widths
+	},
+	)
+	table.SetNode(node.ApplyChildVisible(table.GetNode(), r.GetTree()))
+}
+
+func DrawGraph(g *ui.Graph, r resources.Resources, typ corev1.ResourceName, nodes []*node.Node) {
 	if len(nodes) == 1 {
 		node, ok := r.GetNodeResource(nodes[0].Name())
 		// fmt.Sprintf("usage (%v) / allocatable (%v) = %v",

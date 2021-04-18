@@ -4,18 +4,17 @@ import (
 	"sync"
 
 	"github.com/gizak/termui/v3"
-	"github.com/ynqa/widgets/pkg/widgets"
+	"github.com/ynqa/widgets/pkg/table"
 	corev1 "k8s.io/api/core/v1"
 
-	"github.com/ynqa/ktop/pkg/draw/graph"
-	"github.com/ynqa/ktop/pkg/draw/table"
+	"github.com/ynqa/ktop/pkg/drawer"
 	"github.com/ynqa/ktop/pkg/resources"
 	"github.com/ynqa/ktop/pkg/ui"
 )
 
 type Dashboard struct {
 	mu                    sync.RWMutex
-	table                 *widgets.Table
+	table                 *table.Table
 	cpuGraph, memoryGraph *ui.Graph
 }
 
@@ -27,11 +26,12 @@ func New() *Dashboard {
 	}
 }
 
-func newTable(title string) *widgets.Table {
-	table := widgets.NewTable()
-	table.Title = title
-	table.TitleStyle = termui.NewStyle(termui.ColorClear)
-	table.BorderStyle = termui.NewStyle(termui.ColorBlue)
+func newTable(title string) *table.Table {
+	block := termui.NewBlock()
+	block.Title = title
+	block.TitleStyle = termui.NewStyle(termui.ColorClear)
+	block.BorderStyle = termui.NewStyle(termui.ColorBlue)
+	table := table.New(table.Block(block))
 	return table
 }
 
@@ -43,7 +43,7 @@ func newGraph(title string) *ui.Graph {
 	return graph
 }
 
-func (d *Dashboard) Table() *widgets.Table {
+func (d *Dashboard) Table() *table.Table {
 	return d.table
 }
 
@@ -58,7 +58,7 @@ func (d *Dashboard) MemoryGraph() *ui.Graph {
 func (d *Dashboard) Toggle() {
 	d.mu.Lock()
 	defer d.mu.Unlock()
-	d.table.Node.Toggle(d.table.SelectedRow)
+	d.table.GetNode().Toggle(d.table.GetSelectedRow())
 }
 
 func (d *Dashboard) ScrollUp() {
@@ -77,26 +77,26 @@ func (d *Dashboard) ScrollDown() {
 	d.memoryGraph.Reset()
 }
 
-func (d *Dashboard) UpdateTable(drawer table.Drawer, r resources.Resources) {
+func (d *Dashboard) DrawTable(drawer drawer.TableDrawer, r resources.Resources) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	drawer.Draw(d.table, r)
 }
 
-func (d *Dashboard) UpdateCPUGraph(drawer graph.Drawer, r resources.Resources) {
+func (d *Dashboard) DrawCPUGraph(r resources.Resources) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
-	stack := d.table.Node.Flatten()
-	if d.table.SelectedRow < len(stack) {
-		drawer.Draw(d.cpuGraph, r, corev1.ResourceCPU, stack[d.table.SelectedRow].Parents())
+	stack := d.table.GetNode().Flatten()
+	if d.table.GetSelectedRow() < len(stack) {
+		drawer.DrawGraph(d.cpuGraph, r, corev1.ResourceCPU, stack[d.table.GetSelectedRow()].Parents())
 	}
 }
 
-func (d *Dashboard) UpdateMemoryGraph(drawer graph.Drawer, r resources.Resources) {
+func (d *Dashboard) DrawMemoryGraph(r resources.Resources) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
-	stack := d.table.Node.Flatten()
-	if d.table.SelectedRow < len(stack) {
-		drawer.Draw(d.memoryGraph, r, corev1.ResourceMemory, stack[d.table.SelectedRow].Parents())
+	stack := d.table.GetNode().Flatten()
+	if d.table.GetSelectedRow() < len(stack) {
+		drawer.DrawGraph(d.memoryGraph, r, corev1.ResourceMemory, stack[d.table.GetSelectedRow()].Parents())
 	}
 }

@@ -3,7 +3,7 @@ package resources
 import (
 	"regexp"
 
-	"github.com/ynqa/widgets/pkg/node"
+	"github.com/ynqa/widgets/pkg/table/node"
 	corev1 "k8s.io/api/core/v1"
 	metricsv1beta1 "k8s.io/metrics/pkg/apis/metrics/v1beta1"
 )

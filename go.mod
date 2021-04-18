@@ -14,7 +14,7 @@ require (
 	github.com/nsf/termbox-go v0.0.0-20200418040025-38ba6e5628f1 // indirect
 	github.com/spf13/cobra v1.0.0
 	github.com/stretchr/testify v1.5.1 // indirect
-	github.com/ynqa/widgets v0.0.0-20210403222152-70b18e36d2e3
+	github.com/ynqa/widgets v0.0.0-20210418065851-804f01df2fcb
 	golang.org/x/crypto v0.0.0-20200414173820-0848c9571904 // indirect
 	golang.org/x/net v0.0.0-20200519113804-d87ec0cfa476 // indirect
 	golang.org/x/sys v0.0.0-20200519105757-fe76b779f299 // indirect

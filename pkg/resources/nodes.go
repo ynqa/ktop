@@ -5,14 +5,15 @@ import (
 	"regexp"
 	"sort"
 
-	"github.com/ynqa/ktop/pkg/formats"
-	"github.com/ynqa/widgets/pkg/node"
+	"github.com/ynqa/widgets/pkg/table/node"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/metrics/pkg/client/clientset/versioned"
+
+	"github.com/ynqa/ktop/pkg/formats"
 )
 
 type NodeResources map[string]*NodeResource
