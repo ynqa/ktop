@@ -40,6 +40,7 @@ const (
 type Monitor struct {
 	*kube.KubeClients
 
+	logs            *ui.TextField
 	table           *ui.Table
 	tableTypeCircle *ring.Ring
 
@@ -67,6 +68,11 @@ func NewMonitor(kubeclients *kube.KubeClients, podQuery, containerQuery, nodeQue
 	table.BorderStyle = termui.NewStyle(borderColor)
 	table.CursorColor = selectedTableColor
 
+	// logs of pod
+	logs := ui.NewTextField()
+	logs.Text = `TEST TextField`
+	logs.TextStyle = termui.NewStyle(termui.Color(244), termui.ColorClear)
+
 	// graph for cpu
 	cpu := ui.NewGraph()
 	cpu.Title = "⎈ CPU Usage ⎈"
@@ -86,6 +92,7 @@ func NewMonitor(kubeclients *kube.KubeClients, podQuery, containerQuery, nodeQue
 	mem.LimitColor = graphLimitColor
 
 	monitor.table = table
+	monitor.logs = logs
 	monitor.cpuGraph = cpu
 	monitor.memGraph = mem
 	return monitor
@@ -147,6 +154,10 @@ func (m *Monitor) GetMemGraph() *ui.Graph {
 
 func (m *Monitor) GetPodTable() *ui.Table {
 	return m.table
+}
+
+func (m *Monitor) GetLogs() *ui.TextField {
+	return m.logs
 }
 
 func (m *Monitor) Update() error {
@@ -277,6 +288,12 @@ func (m *Monitor) fetchPodResources() ([]*resource.Resource, []*resource.Summari
 	// filtered
 	for _, podMetrics := range FilterPodMetrics(m.podQuery, podMetricsList.Items) {
 		podName := podMetrics.Name
+		podLogs, err := m.GetPodLogs(*m.Flags.Namespace, podName)
+		// fmt.Print("podLogs")
+		// fmt.Print(podLogs)
+		if err != nil {
+			fmt.Print(err)
+		}
 		pod := FindPod(podName, podList.Items)
 		if pod == nil {
 			continue
@@ -297,7 +314,7 @@ func (m *Monitor) fetchPodResources() ([]*resource.Resource, []*resource.Summari
 			corev1.ResourceList{
 				corev1.ResourceCPU:    cpu,
 				corev1.ResourceMemory: mem,
-			})
+			}, podLogs)
 		summarizedResources = append(summarizedResources, summarizedResource)
 	}
 	return resources, summarizedResources, nil
@@ -329,6 +346,8 @@ func (m *Monitor) updateSummarizedGraph(nodeList *corev1.NodeList, summarized *r
 	limitCpuStr := GetResourceValueString(node.Status.Allocatable, corev1.ResourceCPU)
 	limitMemory := GetResourceValue(node.Status.Allocatable, corev1.ResourceMemory)
 	limitMemoryStr := GetResourceValueString(node.Status.Allocatable, corev1.ResourceMemory)
+
+	m.logs.Text = summarized.GetLogs()
 
 	m.cpuGraph.LabelHeader = fmt.Sprintf("Name: %v", summarized.GetPodName())
 	m.cpuGraph.Data = append(m.cpuGraph.Data, cpuUsage)
