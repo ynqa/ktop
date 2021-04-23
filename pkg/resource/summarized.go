@@ -9,13 +9,15 @@ import (
 type SummarizedResource struct {
 	podName  string
 	nodeName string
+	logs     string
 	usage    corev1.ResourceList
 }
 
-func NewSummarizedResource(p corev1.Pod, sumUsage corev1.ResourceList) *SummarizedResource {
+func NewSummarizedResource(p corev1.Pod, sumUsage corev1.ResourceList, logs string) *SummarizedResource {
 	return &SummarizedResource{
 		podName:  p.Name,
 		nodeName: p.Spec.NodeName,
+		logs:     logs,
 		usage:    sumUsage,
 	}
 }
@@ -31,6 +33,10 @@ func (s *SummarizedResource) GetPodName() string {
 func (s *SummarizedResource) GetCpuUsage() (float64, string) {
 	return GetResourceValue(s.usage, corev1.ResourceCPU),
 		GetResourceValueString(s.usage, corev1.ResourceCPU)
+}
+
+func (s *SummarizedResource) GetLogs() string {
+	return s.logs
 }
 
 func (s *SummarizedResource) GetMemoryUsage() (float64, string) {
