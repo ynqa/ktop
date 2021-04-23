@@ -40,7 +40,7 @@ const (
 type Monitor struct {
 	*kube.KubeClients
 
-	logs            *ui.TextField
+	logs            *ui.Paragraph
 	table           *ui.Table
 	tableTypeCircle *ring.Ring
 
@@ -69,8 +69,11 @@ func NewMonitor(kubeclients *kube.KubeClients, podQuery, containerQuery, nodeQue
 	table.CursorColor = selectedTableColor
 
 	// logs of pod
-	logs := ui.NewTextField()
-	logs.Text = `TEST TextField`
+	logs := ui.NewParagraph()
+	logs.Title = "⎈ Logs ⎈"
+	logs.TitleStyle = titleStyle
+	logs.Text = `Loading...`
+	logs.BorderStyle = termui.NewStyle(borderColor)
 	logs.TextStyle = termui.NewStyle(termui.Color(244), termui.ColorClear)
 
 	// graph for cpu
@@ -156,7 +159,7 @@ func (m *Monitor) GetPodTable() *ui.Table {
 	return m.table
 }
 
-func (m *Monitor) GetLogs() *ui.TextField {
+func (m *Monitor) GetLogs() *ui.Paragraph {
 	return m.logs
 }
 
@@ -289,8 +292,6 @@ func (m *Monitor) fetchPodResources() ([]*resource.Resource, []*resource.Summari
 	for _, podMetrics := range FilterPodMetrics(m.podQuery, podMetricsList.Items) {
 		podName := podMetrics.Name
 		podLogs, err := m.GetPodLogs(*m.Flags.Namespace, podName)
-		// fmt.Print("podLogs")
-		// fmt.Print(podLogs)
 		if err != nil {
 			fmt.Print(err)
 		}

@@ -56,11 +56,11 @@ func (k *KubeClients) GetPodList(namespace string, labelSelector labels.Selector
 }
 
 func (k *KubeClients) GetPodLogs(namespace string, podName string) (string, error) {
-	count := int64(100)
+	// Tail size (number of lines)
+	count := int64(30)
 	follow := false
 	message := ""
 	podLogOptions := corev1.PodLogOptions{
-		//Container: containerName,
 		Follow:    follow,
 		TailLines: &count,
 	}
