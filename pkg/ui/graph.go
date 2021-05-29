@@ -19,7 +19,7 @@ type Type string
 
 const (
 	TimeSeries Type = "timeseries"
-	Constant   Type = "constant"
+	BaseLine   Type = "baseline"
 )
 
 type Data struct {
@@ -51,7 +51,7 @@ func (self *Graph) Update(list []Data) {
 		case TimeSeries:
 			self.graph.timeseries.values = append(self.graph.timeseries.values, d.Value)
 			self.graph.timeseries.style = d.Style
-		case Constant:
+		case BaseLine:
 			constants = append(constants, struct {
 				value float64
 				style Style
@@ -60,7 +60,7 @@ func (self *Graph) Update(list []Data) {
 				style: d.Style,
 			})
 		}
-		self.graph.constants = constants
+		self.graph.baselines = constants
 		self.label.values = append(self.label.values, struct {
 			value string
 			style Style
@@ -93,7 +93,7 @@ func (self *Graph) Grid() *Grid {
 type graph struct {
 	*Block
 
-	constants []struct {
+	baselines []struct {
 		value float64
 		style Style
 	}
@@ -118,7 +118,7 @@ func newGraph() *graph {
 
 func (self *graph) reset() {
 	self.timeseries.values = make([]float64, 0)
-	self.constants = make([]struct {
+	self.baselines = make([]struct {
 		value float64
 		style Style
 	}, 0)
@@ -126,7 +126,7 @@ func (self *graph) reset() {
 
 func (self *graph) getY(val float64) int {
 	var max float64
-	for _, c := range self.constants {
+	for _, c := range self.baselines {
 		if max < c.value {
 			max = c.value
 		}
@@ -144,7 +144,7 @@ func (self *graph) Draw(buf *Buffer) {
 	canvas := NewCanvas()
 	canvas.Rectangle = self.Inner
 
-	for _, c := range self.constants {
+	for _, c := range self.baselines {
 		canvas.SetLine(
 			image.Pt(self.Inner.Min.X*2, self.getY(c.value)*4),
 			image.Pt(self.Inner.Max.X*2, self.getY(c.value)*4),

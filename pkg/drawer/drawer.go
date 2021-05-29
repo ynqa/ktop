@@ -55,7 +55,7 @@ func DrawGraph(g *ui.Graph, r resources.Resources, typ corev1.ResourceName, node
 		if ok {
 			g.Update([]ui.Data{
 				{
-					Type:  ui.Constant,
+					Type:  ui.BaseLine,
 					Value: float64(formats.FormatResource(typ, node.Allocatable)),
 					Label: fmt.Sprintf("allocatable: %v", formats.FormatResourceString(typ, node.Allocatable)),
 					Style: termui.NewStyle(termui.ColorRed, termui.ColorClear),
