@@ -14,7 +14,7 @@ archives:
     format: zip
 
 brews:
-- github:
+- tap:
     owner: ynqa
     name: homebrew-tap
   homepage: https://github.com/ynqa/ktop/
