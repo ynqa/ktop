@@ -1,6 +1,8 @@
 package kube
 
 import (
+	"io"
+
 	"github.com/pkg/errors"
 
 	corev1 "k8s.io/api/core/v1"
@@ -51,6 +53,40 @@ func NewKubeClients(flags *genericclioptions.ConfigFlags) (*KubeClients, error) 
 
 func (k *KubeClients) GetPodList(namespace string, labelSelector labels.Selector) (*corev1.PodList, error) {
 	return k.clientset.CoreV1().Pods(namespace).List(metav1.ListOptions{LabelSelector: labelSelector.String()})
+}
+
+func (k *KubeClients) GetPodLogs(namespace string, podName string) (string, error) {
+	// Tail size (number of lines)
+	count := int64(30)
+	follow := false
+	message := ""
+	podLogOptions := corev1.PodLogOptions{
+		Follow:    follow,
+		TailLines: &count,
+	}
+	podLogRequest := k.clientset.CoreV1().
+		Pods(namespace).
+		GetLogs(podName, &podLogOptions)
+	stream, err := podLogRequest.Stream()
+	if err != nil {
+		return "failure1", err
+	}
+	defer stream.Close()
+	for {
+		buf := make([]byte, 2000)
+		numBytes, err := stream.Read(buf)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return "failure2", err
+		}
+		if numBytes == 0 {
+			continue
+		}
+		message += string(buf[:numBytes])
+	}
+	return message, nil
 }
 
 func (k *KubeClients) GetPodMetricsList(namespace string, labelSelector labels.Selector) (*metrics.PodMetricsList, error) {
