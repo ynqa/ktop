@@ -16,6 +16,6 @@ archives:
 brews:
 - tap:
     owner: ynqa
-    name: homebrew-tap
+    name: homebrew-tap-archived
   homepage: https://github.com/ynqa/ktop/
   description: "A visualized monitoring dashboard for Kubernetes"
